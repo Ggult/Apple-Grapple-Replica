@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c0800dbc88259d48839903e0c22e21d, type: 3}
+  m_Name: MapConfig
+  m_EditorClassIdentifier: 
+  tileWorldSize: 0.9
+  GridX: 50
+  GridY: 50
+  mapTileVariants:
+  - Chance: 0.05
+    tileSprite: {fileID: 21300000, guid: f87ba4f8eef81df4da02274ff10b990f, type: 3}
+  - Chance: 0.05
+    tileSprite: {fileID: 21300000, guid: 03f9edce465898041930b497c15b99af, type: 3}
+  - Chance: 0.05
+    tileSprite: {fileID: 21300000, guid: fafef72180419924eb89dc5046a4c690, type: 3}
+  defaultTileSprite: {fileID: 21300000, guid: 64b1524b09dbdf7428d18ca1063ac485, type: 3}
+  boundarySettings:
+    offset: {x: 2, y: 2}
+    spriteA: {fileID: 21300000, guid: 591938bf282828d49b0775a7bb59daf2, type: 3}
+    spriteB: {fileID: 21300000, guid: 5555e7f0b90dd7f43aafb0899dd45183, type: 3}
+    spriteC: {fileID: 21300000, guid: db6901723f27f984da003ee71c5cf68e, type: 3}
+    spriteBSize: {x: 0.2, y: 1.8}
+    spriteCSize: {x: 1.8, y: 0.2}
