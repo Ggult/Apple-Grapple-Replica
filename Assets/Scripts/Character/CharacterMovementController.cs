@@ -4,16 +4,38 @@ namespace AppleGrapple
     public class CharacterMovementController : MonoBehaviour
     {
         [SerializeField] private float _movementSpeed = 5f;
+        [SerializeField] private float _knockbackForce = 2f;
+        [SerializeField] private float _knockbackDuration = 0.12f;
         private IInputProvider _inputProvider;
         private Rigidbody2D _rb;
         private Animator _animator;
+        private Health _health;
         [SerializeField] private SpriteRenderer body;
         private const string SpeedParameter = "Speed";
+
+        private Vector2 _externalVelocityStart;
+        private float _externalVelocityDuration;
+        private float _externalVelocityElapsed;
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();      
             _animator = GetComponent<Animator>();
+            _health = GetComponent<Health>();
             _inputProvider = new MovementInputProvider();
+
+            if (_health != null)
+            {
+                _health.Damaged += HandleDamaged;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_health != null)
+            {
+                _health.Damaged -= HandleDamaged;
+            }
         }
 
         private void Update()
@@ -31,11 +53,31 @@ namespace AppleGrapple
             }
         }
 
+        // Adds a decaying push on top of input velocity instead of locking movement, so the player can still steer/escape while shoved.
+        private void HandleDamaged(Vector2 sourcePosition)
+        {
+            var direction = ((Vector2)transform.position - sourcePosition).normalized;
+            _externalVelocityStart = direction * _knockbackForce;
+            _externalVelocityDuration = _knockbackDuration;
+            _externalVelocityElapsed = 0f;
+        }
+
+        private Vector2 GetExternalVelocity()
+        {
+            if (_externalVelocityDuration <= 0f) return Vector2.zero;
+
+            _externalVelocityElapsed += Time.fixedDeltaTime;
+            var t = Mathf.Clamp01(_externalVelocityElapsed / _externalVelocityDuration);
+            if (t >= 1f) _externalVelocityDuration = 0f;
+
+            return Vector2.Lerp(_externalVelocityStart, Vector2.zero, t);
+        }
+
         public void Move(Vector2 direction)
         {
             if (_rb != null)
             {
-                _rb.linearVelocity = direction * _movementSpeed;
+                _rb.linearVelocity = direction * _movementSpeed + GetExternalVelocity();
             }
             if (body != null && _inputProvider != null && _inputProvider.IsDragging)
             {
