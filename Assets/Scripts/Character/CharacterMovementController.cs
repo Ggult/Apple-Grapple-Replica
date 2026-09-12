@@ -6,10 +6,7 @@ namespace AppleGrapple
         [SerializeField] private CharacterConfig _characterConfig;
         private IInputProvider _inputProvider;
         private Rigidbody2D _rb;
-        private Animator _animator;
         private Health _health;
-        [SerializeField] private SpriteRenderer body;
-        private const string SpeedParameter = "Speed";
 
         private Vector2 _externalVelocityStart;
         private float _externalVelocityDuration;
@@ -18,7 +15,6 @@ namespace AppleGrapple
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();      
-            _animator = GetComponent<Animator>();
             _health = GetComponent<Health>();
 
             if (_health != null)
@@ -80,14 +76,6 @@ namespace AppleGrapple
             if (_rb != null)
             {
                 _rb.linearVelocity = direction * _characterConfig.movementSpeed + GetExternalVelocity();
-            }
-            if (body != null && _inputProvider != null && _inputProvider.IsDragging)
-            {
-                body.flipX = direction.x < 0;
-            }
-            if (_animator != null)
-            {
-                _animator.SetFloat(SpeedParameter, direction.magnitude);
             }
         }
     }

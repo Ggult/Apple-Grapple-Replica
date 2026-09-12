@@ -2,37 +2,54 @@ using UnityEngine;
 
 namespace AppleGrapple
 {
-    [RequireComponent(typeof(ParticleSystem))]
     public class PooledHitEffect : MonoBehaviour
     {
-        private ParticleSystem _particleSystem;
+        [SerializeField] private ParticleSystem[] _particleSystems;
         private HitEffectPool _pool;
         private HitType _type;
+        private int _poolKey;
         private bool _isReturned;
 
         private void Awake()
         {
-            _particleSystem = GetComponent<ParticleSystem>();
-            var main = _particleSystem.main;
-            main.stopAction = ParticleSystemStopAction.Callback;
+            if (_particleSystems == null || _particleSystems.Length == 0)
+                return;
+
+            foreach (var particleSystem in _particleSystems)
+            {
+                var main = particleSystem.main;
+                main.stopAction = ParticleSystemStopAction.Callback;
+            }
         }
 
         public void Initialize(HitEffectPool pool, HitType type)
         {
+            Initialize(pool, type, 0);
+        }
+
+        public void Initialize(HitEffectPool pool, HitType type, int poolKey)
+        {
             _pool = pool;
             _type = type;
+            _poolKey = poolKey;
         }
 
         public void Play()
         {
             _isReturned = false;
             gameObject.SetActive(true);
-            _particleSystem.Play(true);
+            foreach (var particleSystem in _particleSystems)
+            {
+                particleSystem.Play(true);
+            }
         }
 
         public void StopAndClear()
         {
-            _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            foreach (var particleSystem in _particleSystems)
+            {
+                particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
         }
 
         private void OnParticleSystemStopped()
@@ -40,7 +57,7 @@ namespace AppleGrapple
             if (!_isReturned && _pool != null)
             {
                 _isReturned = true;
-                _pool.Return(this, _type);
+                _pool.Return(this, _type, _poolKey);
             }
         }
     }

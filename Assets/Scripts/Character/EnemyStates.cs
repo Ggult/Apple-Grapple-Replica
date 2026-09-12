@@ -38,8 +38,12 @@ namespace AppleGrapple
             var target = StateMachine.FindClosestEnemy();
             if (target == null)
             {
-                StateMachine.SetDebugDecision("No enemy in search radius: searching for sword");
-                StateMachine.ChangeState(StateMachine.SearchForSwordState);
+                StateMachine.SetDebugDecision(StateMachine.SwordOrigin.SwordCount > 0
+                    ? "No enemy in search radius: roaming"
+                    : "No enemy and no sword: searching for sword");
+                StateMachine.ChangeState(StateMachine.SwordOrigin.SwordCount > 0
+                    ? StateMachine.IdleState
+                    : StateMachine.SearchForSwordState);
                 return;
             }
 
@@ -182,13 +186,6 @@ namespace AppleGrapple
 
         public override void Update()
         {
-            if (StateMachine.SwordOrigin.SwordCount == 0)
-            {
-                StateMachine.SetDebugDecision("No sword while roaming: searching for sword");
-                StateMachine.ChangeState(StateMachine.SearchForSwordState);
-                return;
-            }
-
             var offset = _roamTarget - (Vector2)StateMachine.transform.position;
             var stoppingDistance = StateMachine.RoamStoppingDistance;
             if (offset.sqrMagnitude <= stoppingDistance * stoppingDistance)

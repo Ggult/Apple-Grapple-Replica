@@ -6,7 +6,9 @@ namespace AppleGrapple
     public class SwordOrigin : MonoBehaviour
     {
         [SerializeField] private float _radius = 1.5f;
-        [SerializeField] private float _orbitSpeed = 90f;
+        [SerializeField] private float _initialOrbitSpeed = 250f;
+        [SerializeField] private float _orbitSpeedPerSword = 20f;
+        [SerializeField] private float _maxOrbitSpeed = 450f;
         [SerializeField] private float _slotBlendSpeed = 360f;
         [SerializeField] private PickupCollector pickupCollector;
 
@@ -14,6 +16,7 @@ namespace AppleGrapple
         private readonly List<float> _currentSlotAngles = new List<float>();
         private readonly List<float> _targetSlotAngles = new List<float>();
         private float _orbitAngle;
+        private float _orbitSpeed;
         private CharacterIdentity _identity;
     
 
@@ -23,6 +26,7 @@ namespace AppleGrapple
         private void Awake()
         {
             _identity = GetComponent<CharacterIdentity>();
+            _orbitSpeed = Mathf.Min(_maxOrbitSpeed, _initialOrbitSpeed);
             if (pickupCollector != null)
             {
                 pickupCollector.RegisterPickupAction(PickupType.Sword, AddWeapon);
@@ -38,6 +42,7 @@ namespace AppleGrapple
             _weapons.Add(sword);
             _currentSlotAngles.Add(_targetSlotAngles.Count > 0 ? _targetSlotAngles[_targetSlotAngles.Count - 1] : 0f);
             _targetSlotAngles.Add(0f);
+            _orbitSpeed = Mathf.Min(_maxOrbitSpeed, _orbitSpeed + _orbitSpeedPerSword);
             RecalculateSlotTargets();
         }
 
@@ -61,7 +66,16 @@ namespace AppleGrapple
                 _currentSlotAngles.RemoveAt(index);
                 _targetSlotAngles.RemoveAt(index);
                 WeaponPooling.Return(weapon);
+                _orbitSpeed = Mathf.Max(0f, _orbitSpeed - _orbitSpeedPerSword);
                 RecalculateSlotTargets();
+            }
+        }
+
+        public void RemoveAllWeapons()
+        {
+            for (var i = _weapons.Count - 1; i >= 0; i--)
+            {
+                RemoveWeapon(_weapons[i]);
             }
         }
 

@@ -62,6 +62,15 @@ namespace AppleGrapple
             }
         }
 
+        public void RemoveCharacterInfo()
+        {
+            if (_characterInfoView == null)
+                return;
+
+            Destroy(_characterInfoView.gameObject);
+            _characterInfoView = null;
+        }
+
         private void FlashWhite()
         {
             if (_flashRoutine != null)

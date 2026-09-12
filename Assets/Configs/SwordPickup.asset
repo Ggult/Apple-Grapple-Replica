@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 7020306827701882247, guid: 45c5563e9a484cd488cb5de682123d1f, type: 3}
   poolSize: 10
-  maxAliveCount: 5
-  minSpawnInterval: 3
-  maxSpawnInterval: 8
+  maxAliveCount: 10
+  initialSpawnCount: 3
+  minSpawnInterval: 1
+  maxSpawnInterval: 3

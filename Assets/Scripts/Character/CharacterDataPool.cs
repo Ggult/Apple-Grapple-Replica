@@ -7,10 +7,33 @@ namespace AppleGrapple
     {
         private static readonly List<CharacterProfileData> _allEntries = new()
         {
-            new CharacterProfileData("bigboss_99", Country.TR),
-            new CharacterProfileData("american_99", Country.US),
-            new CharacterProfileData("chinese_99", Country.CN),
-            new CharacterProfileData("japanese_99", Country.JP),
+            new CharacterProfileData("AnatolianAce", Country.TR),
+            new CharacterProfileData("BosporusBlade", Country.TR),
+            new CharacterProfileData("CappadociaClash", Country.TR),
+            new CharacterProfileData("IstanbulDash", Country.TR),
+            new CharacterProfileData("RedCrescent", Country.TR),
+            new CharacterProfileData("TurkishThunder", Country.TR),
+
+            new CharacterProfileData("LibertyRush", Country.US),
+            new CharacterProfileData("DesertRanger", Country.US),
+            new CharacterProfileData("IronEagle", Country.US),
+            new CharacterProfileData("LoneStriker", Country.US),
+            new CharacterProfileData("NeonHustler", Country.US),
+            new CharacterProfileData("WildFrontier", Country.US),
+
+            new CharacterProfileData("JadeRunner", Country.CN),
+            new CharacterProfileData("DragonPulse", Country.CN),
+            new CharacterProfileData("SilkStorm", Country.CN),
+            new CharacterProfileData("PandaFury", Country.CN),
+            new CharacterProfileData("GreatWall", Country.CN),
+            new CharacterProfileData("RedLantern", Country.CN),
+
+            new CharacterProfileData("RisingSun", Country.JP),
+            new CharacterProfileData("RoninRush", Country.JP),
+            new CharacterProfileData("NeonSamurai", Country.JP),
+            new CharacterProfileData("SakuraStrike", Country.JP),
+            new CharacterProfileData("ShogunEdge", Country.JP),
+            new CharacterProfileData("TokyoFlash", Country.JP),
         };
 
         private static List<CharacterProfileData> _available = new(_allEntries);

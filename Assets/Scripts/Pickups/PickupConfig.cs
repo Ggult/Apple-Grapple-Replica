@@ -7,6 +7,7 @@ namespace AppleGrapple
         public Pickup prefab;
         public int poolSize = 10;
         public int maxAliveCount = 5;
+        [Min(0)] public int initialSpawnCount = 0;
         public float minSpawnInterval = 3f;
         public float maxSpawnInterval = 8f;
     }

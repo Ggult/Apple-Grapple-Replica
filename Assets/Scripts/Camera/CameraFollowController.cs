@@ -7,6 +7,11 @@ namespace AppleGrapple
         [SerializeField] private Vector3 offset;
         [SerializeField] private float smoothSpeed = 0.125f;
 
+        public void SetTarget(Transform newTarget)
+        {
+            target = newTarget;
+        }
+
         private void LateUpdate()
         {
             if (target == null) return;

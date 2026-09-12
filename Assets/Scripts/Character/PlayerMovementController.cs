@@ -3,6 +3,7 @@ using UnityEngine;
 namespace AppleGrapple
 {
     [RequireComponent(typeof(CharacterMovementController))]
+    [RequireComponent(typeof(CharacterDeathController))]
     public class PlayerMovementController : MonoBehaviour
     {
         private CharacterMovementController _movementController;

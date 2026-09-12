@@ -4,6 +4,7 @@ namespace AppleGrapple
 {
     [RequireComponent(typeof(CharacterMovementController), typeof(Health), typeof(CharacterIdentity))]
     [RequireComponent(typeof(SwordOrigin))]
+    [RequireComponent(typeof(CharacterDeathController))]
     public class EnemyStateMachine : MonoBehaviour, IInputProvider
     {
         [SerializeField] private float _attackDistance = 1.5f;

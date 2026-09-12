@@ -26,6 +26,7 @@ namespace AppleGrapple
         {
             if (_spawnRoutine == null)
             {
+                SpawnInitialPickups();
                 _spawnRoutine = StartCoroutine(SpawnLoop());
             }
         }
@@ -49,6 +50,15 @@ namespace AppleGrapple
                 {
                     Spawn();
                 }
+            }
+        }
+
+        private void SpawnInitialPickups()
+        {
+            var initialCount = Mathf.Min(_config.initialSpawnCount, _config.maxAliveCount);
+            for (var i = 0; i < initialCount; i++)
+            {
+                Spawn();
             }
         }
 

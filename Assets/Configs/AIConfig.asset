@@ -16,4 +16,4 @@ MonoBehaviour:
   maxHealth: 100
   knockbackForce: 50
   knockbackDuration: 0.12
-  aiSmartValue: 1
+  aiSmartValue: 0.5
