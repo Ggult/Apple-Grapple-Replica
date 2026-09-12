@@ -78,11 +78,11 @@ Material:
     - _Softness: 0.0476
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Stencil: 0
+    - _Stencil: 9
     - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
+    - _StencilOp: 9
+    - _StencilReadMask: 253.65
+    - _StencilWriteMask: 259.4
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

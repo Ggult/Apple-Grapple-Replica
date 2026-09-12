@@ -9,12 +9,12 @@ namespace AppleGrapple
     {
 
         private static readonly int FlashAmountId = Shader.PropertyToID("_FlashAmount");
-        [SerializeField] private HealthBar healthBar;
         [SerializeField] private SpriteRenderer[] hitFlashSprites;
         [SerializeField] private float hitFlashDuration = 0.15f;
-        [SerializeField] private CharacterInfoView characterInfoView;
+        [SerializeField] private CharacterInfoView characterInfoViewPrefab;
         [SerializeField] private bool isPlayer;
         private Health _health;
+        private CharacterInfoView _characterInfoView;
         private MaterialPropertyBlock _propertyBlock;
         private Coroutine _flashRoutine;
 
@@ -25,18 +25,21 @@ namespace AppleGrapple
             _propertyBlock = new MaterialPropertyBlock();
             _health.Damaged += HandleDamaged;
             _health.HealthChanged += HandleHealthChanged;
-            if (characterInfoView != null)
+
+            if (characterInfoViewPrefab != null && CharacterInfoCanvas.Instance != null)
             {
                 var data = isPlayer ? PlayerIdentity.Load() : CharacterDataPool.Get();
-                characterInfoView.Setup(data);
+                _characterInfoView = Instantiate(characterInfoViewPrefab, CharacterInfoCanvas.Instance.RectTransform);
+                _characterInfoView.SetFollowTarget(transform);
+                _characterInfoView.Setup(data);
             }
         }
 
         private void Start()
         {
-            if (healthBar != null)
+            if (_characterInfoView != null)
             {
-                healthBar.UpdateFill(_health.CurrentHealth, _health.MaxHealth);
+                _characterInfoView.UpdateHealth(_health.CurrentHealth, _health.MaxHealth);
             }
         }
 
@@ -53,9 +56,9 @@ namespace AppleGrapple
 
         private void HandleHealthChanged(int current, int max)
         {
-            if (healthBar != null)
+            if (_characterInfoView != null)
             {
-                healthBar.UpdateFill(current, max);
+                _characterInfoView.UpdateHealth(current, max);
             }
         }
 
