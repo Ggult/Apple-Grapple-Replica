@@ -8,18 +8,24 @@ namespace AppleGrapple
         [SerializeField] private float _radius = 1.5f;
         [SerializeField] private float _orbitSpeed = 90f;
         [SerializeField] private float _slotBlendSpeed = 360f;
+        [SerializeField] private PickupCollector pickupCollector;
 
         private readonly List<Sword> _weapons = new List<Sword>();
         private readonly List<float> _currentSlotAngles = new List<float>();
         private readonly List<float> _targetSlotAngles = new List<float>();
         private float _orbitAngle;
         private CharacterIdentity _identity;
+    
 
         public bool IsPlayer => _identity is {IsPlayer: true};
 
         private void Awake()
         {
             _identity = GetComponent<CharacterIdentity>();
+            if (pickupCollector != null)
+            {
+                pickupCollector.RegisterPickupAction(PickupType.Sword, AddWeapon);
+            }
         }
 
         [ContextMenu("Add Weapon")]

@@ -1,14 +1,12 @@
 using UnityEngine;
+using System;
 namespace AppleGrapple
 {
     public class SwordPickup : Pickup
     {
-        protected override bool TryCollect(PickupCollector collector)
+        public override bool TryCollect()
         {
-            var swordOrigin = collector.GetCapability<SwordOrigin>();
-            if (swordOrigin == null) return false;
-
-            swordOrigin.AddWeapon();
+            Collected?.Invoke(this);
             return true;
         }
     }

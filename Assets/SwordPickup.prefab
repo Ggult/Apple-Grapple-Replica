@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1310723550428497995}
   - component: {fileID: 7020306827701882247}
   - component: {fileID: 5663739866269227502}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SwordPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de75a2cbf5ea9c34ba3981a659e8d45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupType: 1
 --- !u!95 &5663739866269227502
 Animator:
   serializedVersion: 7
@@ -116,7 +117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1308535329873226116}
   - component: {fileID: 4483008017619555321}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6480374888605926591}
   - component: {fileID: 1197399321648789579}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
