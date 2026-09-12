@@ -7,9 +7,8 @@ namespace AppleGrapple
     [RequireComponent(typeof(Health), typeof(SwordOrigin), typeof(Rigidbody2D))]
     public class DummyEnemy : MonoBehaviour
     {
+        [SerializeField] private CharacterConfig _characterConfig;
         [SerializeField] private int _startingSwordCount = 1;
-        [SerializeField] private float _knockbackForce = 2f;
-        [SerializeField] private float _knockbackDuration = 0.12f;
 
         private SwordOrigin _swordOrigin;
         private Health _health;
@@ -39,23 +38,23 @@ namespace AppleGrapple
         }
 
         // No movement controller to blend into here, so drive the Rigidbody2D directly with a decaying push.
-        private void HandleDamaged(Vector2 sourcePosition)
+        private void HandleDamaged(HitInfo hitInfo)
         {
-            var direction = ((Vector2)transform.position - sourcePosition).normalized;
+            var direction = ((Vector2)transform.position - (Vector2)hitInfo.Position).normalized;
 
             if (_knockbackRoutine != null)
             {
                 StopCoroutine(_knockbackRoutine);
             }
-            _knockbackRoutine = StartCoroutine(KnockbackRoutine(direction * _knockbackForce));
+            _knockbackRoutine = StartCoroutine(KnockbackRoutine(direction * _characterConfig.knockbackForce));
         }
 
         private IEnumerator KnockbackRoutine(Vector2 initialVelocity)
         {
             float elapsed = 0f;
-            while (elapsed < _knockbackDuration)
+            while (elapsed < _characterConfig.knockbackDuration)
             {
-                _rb.linearVelocity = Vector2.Lerp(initialVelocity, Vector2.zero, elapsed / _knockbackDuration);
+                _rb.linearVelocity = Vector2.Lerp(initialVelocity, Vector2.zero, elapsed / _characterConfig.knockbackDuration);
                 elapsed += Time.fixedDeltaTime;
                 yield return new WaitForFixedUpdate();
             }

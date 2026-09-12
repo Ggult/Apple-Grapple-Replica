@@ -17,7 +17,7 @@ public class CharacterInfoView : MonoBehaviour
 
     private Transform _followTarget;
 
-    public void Setup(CharacterData data)
+    public void Setup(CharacterProfileData data)
     {
         nickLabel.text = data.Nickname;
         var flagSprite =  flagSprites.FirstOrDefault(sprite => sprite.name == data.FlagCode);

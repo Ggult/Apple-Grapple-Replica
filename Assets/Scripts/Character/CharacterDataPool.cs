@@ -5,23 +5,23 @@ namespace AppleGrapple
     // Predefined AI identities. Get() hands out a random unused entry and removes it, so no two AI end up identical.
     public static class CharacterDataPool
     {
-        private static readonly List<CharacterData> _allEntries = new()
+        private static readonly List<CharacterProfileData> _allEntries = new()
         {
-            new CharacterData("bigboss_99", Country.TR),
-            new CharacterData("american_99", Country.US),
-            new CharacterData("chinese_99", Country.CN),
-            new CharacterData("japanese_99", Country.JP),
+            new CharacterProfileData("bigboss_99", Country.TR),
+            new CharacterProfileData("american_99", Country.US),
+            new CharacterProfileData("chinese_99", Country.CN),
+            new CharacterProfileData("japanese_99", Country.JP),
         };
 
-        private static List<CharacterData> _available = new(_allEntries);
+        private static List<CharacterProfileData> _available = new(_allEntries);
 
         // Call at match start so a previous match's picks don't carry over.
         public static void Reset()
         {
-            _available = new List<CharacterData>(_allEntries);
+            _available = new List<CharacterProfileData>(_allEntries);
         }
 
-        public static CharacterData Get()
+        public static CharacterProfileData Get()
         {
             if (_available.Count == 0)
             {

@@ -1,12 +1,12 @@
 namespace AppleGrapple
 {
     [System.Serializable]
-    public struct CharacterData
+    public struct CharacterProfileData
     {
         public string Nickname;
         public Country Country;
 
-        public CharacterData(string nickname, Country country)
+        public CharacterProfileData(string nickname, Country country)
         {
             Nickname = nickname;
             Country = country;

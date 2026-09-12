@@ -3,9 +3,7 @@ namespace AppleGrapple
 {
     public class CharacterMovementController : MonoBehaviour
     {
-        [SerializeField] private float _movementSpeed = 5f;
-        [SerializeField] private float _knockbackForce = 2f;
-        [SerializeField] private float _knockbackDuration = 0.12f;
+        [SerializeField] private CharacterConfig _characterConfig;
         private IInputProvider _inputProvider;
         private Rigidbody2D _rb;
         private Animator _animator;
@@ -54,11 +52,11 @@ namespace AppleGrapple
         }
 
         // Adds a decaying push on top of input velocity instead of locking movement, so the player can still steer/escape while shoved.
-        private void HandleDamaged(Vector2 sourcePosition)
+        private void HandleDamaged(HitInfo hitInfo)
         {
-            var direction = ((Vector2)transform.position - sourcePosition).normalized;
-            _externalVelocityStart = direction * _knockbackForce;
-            _externalVelocityDuration = _knockbackDuration;
+            var direction = ((Vector2)transform.position - (Vector2)hitInfo.Position).normalized;
+            _externalVelocityStart = direction * _characterConfig.knockbackForce;
+            _externalVelocityDuration = _characterConfig.knockbackDuration;
             _externalVelocityElapsed = 0f;
         }
 
@@ -77,7 +75,7 @@ namespace AppleGrapple
         {
             if (_rb != null)
             {
-                _rb.linearVelocity = direction * _movementSpeed + GetExternalVelocity();
+                _rb.linearVelocity = direction * _characterConfig.movementSpeed + GetExternalVelocity();
             }
             if (body != null && _inputProvider != null && _inputProvider.IsDragging)
             {

@@ -4,7 +4,7 @@ namespace AppleGrapple
 {
     // Purely visual: reacts to Health.Damaged with a hit-flash only. No physics, no movement control.
     // Body SpriteRenderer must use a material with the "AppleGrapple/SpriteFlash" shader (_FlashAmount property).
-    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Health), typeof(CharacterIdentity))]
     public class CharacterView : MonoBehaviour
     {
 
@@ -12,8 +12,8 @@ namespace AppleGrapple
         [SerializeField] private SpriteRenderer[] hitFlashSprites;
         [SerializeField] private float hitFlashDuration = 0.15f;
         [SerializeField] private CharacterInfoView characterInfoViewPrefab;
-        [SerializeField] private bool isPlayer;
         private Health _health;
+        private CharacterIdentity _identity;
         private CharacterInfoView _characterInfoView;
         private MaterialPropertyBlock _propertyBlock;
         private Coroutine _flashRoutine;
@@ -22,16 +22,16 @@ namespace AppleGrapple
         private void Awake()
         {
             _health = GetComponent<Health>();
+            _identity = GetComponent<CharacterIdentity>();
             _propertyBlock = new MaterialPropertyBlock();
             _health.Damaged += HandleDamaged;
             _health.HealthChanged += HandleHealthChanged;
 
             if (characterInfoViewPrefab != null && CharacterInfoCanvas.Instance != null)
             {
-                var data = isPlayer ? PlayerIdentity.Load() : CharacterDataPool.Get();
                 _characterInfoView = Instantiate(characterInfoViewPrefab, CharacterInfoCanvas.Instance.RectTransform);
                 _characterInfoView.SetFollowTarget(transform);
-                _characterInfoView.Setup(data);
+                _characterInfoView.Setup(_identity.Data);
             }
         }
 
@@ -49,7 +49,7 @@ namespace AppleGrapple
             _health.HealthChanged -= HandleHealthChanged;
         }
 
-        private void HandleDamaged(Vector2 sourcePosition)
+        private void HandleDamaged(HitInfo hitInfo)
         {
             FlashWhite();
         }

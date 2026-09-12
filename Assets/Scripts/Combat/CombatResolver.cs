@@ -26,7 +26,12 @@ namespace AppleGrapple
             if (HasEnemySwordNearby(sword, health)) return; // let the sword-vs-sword contact win instead
             if (IsOnCooldown(sword, health)) return;
 
-            health.TakeDamage(sword.Damage, sword.transform.position);
+            var hitPosition = sword.transform.position;
+            var targetOrigin = health.GetComponent<SwordOrigin>();
+            var involvesPlayer = sword.Owner.IsPlayer || (targetOrigin != null && targetOrigin.IsPlayer);
+            var hitInfo = new HitInfo(sword.Damage, hitPosition, HitType.EnemyHit, involvesPlayer);
+            health.TakeDamage(hitInfo);
+            HitFeedback.Raise(hitInfo);
             _lastHitTime[(sword, health)] = Time.time;
         }
 
@@ -46,6 +51,11 @@ namespace AppleGrapple
 
         private static void ResolveClash(Sword a, Sword b)
         {
+            var hitPosition = (a.transform.position + b.transform.position) * 0.5f;
+            var hitInfo = new HitInfo(0, hitPosition, HitType.SwordClash,
+                a.Owner.IsPlayer || b.Owner.IsPlayer);
+            HitFeedback.Raise(hitInfo);
+
             a.Owner.RemoveWeapon(a);
             b.Owner.RemoveWeapon(b);
         }

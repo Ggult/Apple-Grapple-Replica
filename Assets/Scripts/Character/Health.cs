@@ -4,29 +4,29 @@ namespace AppleGrapple
 {
     public class Health : MonoBehaviour
     {
-        [SerializeField] private int _maxHealth = 3;
+        [SerializeField] private CharacterConfig _characterConfig;
         private int _currentHealth;
 
         public int CurrentHealth => _currentHealth;
-        public int MaxHealth => _maxHealth;
+        public int MaxHealth => _characterConfig.maxHealth;
         public bool IsDead => _currentHealth <= 0;
 
         public event Action Died;
-        public event Action<Vector2> Damaged;
+        public event Action<HitInfo> Damaged;
         public event Action<int, int> HealthChanged;
 
         private void Awake()
         {
-            _currentHealth = _maxHealth;
+            _currentHealth = MaxHealth;
         }
 
-        public void TakeDamage(int amount, Vector2 sourcePosition)
+        public void TakeDamage(HitInfo hitInfo)
         {
             if (IsDead) return;
 
-            _currentHealth -= amount;
-            Damaged?.Invoke(sourcePosition);
-            HealthChanged?.Invoke(_currentHealth, _maxHealth);
+            _currentHealth -= hitInfo.DamageAmount;
+            Damaged?.Invoke(hitInfo);
+            HealthChanged?.Invoke(_currentHealth, MaxHealth);
             if (IsDead)
             {
                 Debug.Log("Character died.");
