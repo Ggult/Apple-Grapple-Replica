@@ -15,7 +15,28 @@ namespace AppleGrapple
         public Action<Pickup> Collected;
         [SerializeField] private PickupType pickupType;
         public PickupType PickupType => pickupType;
+        private EnemyStateMachine _reservedBy;
        
         public abstract bool TryCollect();
+
+        public bool IsReservedByOther(EnemyStateMachine requester)
+        {
+            return _reservedBy != null && _reservedBy != requester;
+        }
+
+        public bool TryReserve(EnemyStateMachine requester)
+        {
+            if (requester == null || IsReservedByOther(requester))
+                return false;
+
+            _reservedBy = requester;
+            return true;
+        }
+
+        public void ReleaseReservation(EnemyStateMachine requester)
+        {
+            if (requester == null || _reservedBy == requester)
+                _reservedBy = null;
+        }
     }
 }

@@ -20,7 +20,6 @@ namespace AppleGrapple
             _rb = GetComponent<Rigidbody2D>();      
             _animator = GetComponent<Animator>();
             _health = GetComponent<Health>();
-            _inputProvider = new MovementInputProvider();
 
             if (_health != null)
             {
@@ -34,6 +33,11 @@ namespace AppleGrapple
             {
                 _health.Damaged -= HandleDamaged;
             }
+        }
+
+        public void SetInputProvider(IInputProvider inputProvider)
+        {
+            _inputProvider = inputProvider;
         }
 
         private void Update()

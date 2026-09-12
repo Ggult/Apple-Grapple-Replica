@@ -18,6 +18,7 @@ namespace AppleGrapple
     
 
         public bool IsPlayer => _identity is {IsPlayer: true};
+        public int SwordCount => _weapons.Count;
 
         private void Awake()
         {

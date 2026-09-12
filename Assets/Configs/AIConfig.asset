@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16083911b1d2c484cadbca171a8b183b, type: 3}
-  m_Name: CharacterConfig
+  m_Name: AIConfig
   m_EditorClassIdentifier: 
-  movementSpeed: 8
+  movementSpeed: 5
   maxHealth: 100
   knockbackForce: 50
   knockbackDuration: 0.12
-  aiSmartValue: 0
+  aiSmartValue: 1

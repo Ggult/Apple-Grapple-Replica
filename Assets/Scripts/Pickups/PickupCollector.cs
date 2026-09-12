@@ -34,6 +34,7 @@ namespace AppleGrapple
             var collected = pickup.TryCollect();
             if (collected)
             {
+                pickup.ReleaseReservation(null);
                 if (pickupActions.TryGetValue(pickup.PickupType, out var actions))
                 {
                     foreach (var action in actions)

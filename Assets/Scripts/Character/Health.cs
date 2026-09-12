@@ -9,6 +9,7 @@ namespace AppleGrapple
 
         public int CurrentHealth => _currentHealth;
         public int MaxHealth => _characterConfig.maxHealth;
+        public float HealthPercent => MaxHealth <= 0 ? 0f : (float)_currentHealth / MaxHealth;
         public bool IsDead => _currentHealth <= 0;
 
         public event Action Died;

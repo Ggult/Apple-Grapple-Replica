@@ -12,4 +12,7 @@ public class CharacterConfig : ScriptableObject
     [Header("Hit Reaction")]
     public float knockbackForce = 2f;
     public float knockbackDuration = 0.12f;
+
+    [Header("AI")]
+    [Range(0f, 1f)] public float aiSmartValue = 0.5f;
 }

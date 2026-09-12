@@ -721,6 +721,8 @@ GameObject:
   - component: {fileID: 430231453}
   - component: {fileID: 430231454}
   - component: {fileID: 430231455}
+  - component: {fileID: 430231456}
+  - component: {fileID: 430231457}
   m_Layer: 6
   m_Name: Dummy
   m_TagString: Untagged
@@ -740,7 +742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4173b380737f94d8d6128b3db949eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterConfig: {fileID: 11400000, guid: e22ce265204bdd1448e1c9f23dc08975, type: 2}
+  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
   _startingSwordCount: 1
 --- !u!114 &430231446
 MonoBehaviour:
@@ -754,7 +756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50bf884c6f2f86345a4d8fb80ea6fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterConfig: {fileID: 11400000, guid: e22ce265204bdd1448e1c9f23dc08975, type: 2}
+  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
 --- !u!114 &430231447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -920,6 +922,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickupCollider: {fileID: 296288702}
   pickupRange: 3
+--- !u!114 &430231456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430231444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c290cbc7626a643af91b5a86c1496d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
+  body: {fileID: 44605515}
+--- !u!114 &430231457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430231444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6481f8a6970b76048b89cd4ec0e3c809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackDistance: 1.5
+  _enemySearchRadius: 8
+  _lowHealthThreshold: 0.3
+  _decisionInterval: 0.25
+  _roamArrivalDistance: 0.25
+  _roamArenaMargin: 1
+  _mapConfig: {fileID: 11400000, guid: fc31c0fcc9a57af4bbad395d6ae61d3a, type: 2}
+  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
+  _debugCurrentState: 
+  _debugLastDecision: 
+  _debugTarget: 
+  _debugSwordCount: 0
+  _debugTargetSwordCount: 0
+  _debugHealthPercent: 0
+  _debugMovementInput: {x: 0, y: 0}
 --- !u!1 &523978903
 GameObject:
   m_ObjectHideFlags: 0
@@ -2020,6 +2063,7 @@ GameObject:
   - component: {fileID: 1615551517}
   - component: {fileID: 1615551518}
   - component: {fileID: 1615551519}
+  - component: {fileID: 1615551520}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -2219,6 +2263,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickupCollider: {fileID: 1339795432}
   pickupRange: 2
+--- !u!114 &1615551520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615551508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517820eb45da06e44909db7b0fab04b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1718789628
 GameObject:
   m_ObjectHideFlags: 0
