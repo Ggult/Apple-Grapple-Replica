@@ -20,7 +20,7 @@ namespace ScratchCardAsset.Core.InputData
             TryGetComponent(out eventSystem);
             if (eventSystem == null)
             {
-                eventSystem = FindObjectOfType<EventSystem>();
+                eventSystem = FindFirstObjectByType<EventSystem>();
             }
         }
 

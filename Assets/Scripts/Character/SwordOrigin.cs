@@ -65,6 +65,7 @@ namespace AppleGrapple
 
                 _weapons[i].transform.localPosition = offset;
                 _weapons[i].transform.localRotation = Quaternion.Euler(0, 0, angle);
+                ScratchManager.Scratch(_weapons[i].ScratchPosition);
             }
         }
     }

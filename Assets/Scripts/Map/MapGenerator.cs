@@ -97,7 +97,7 @@ namespace AppleGrapple
                 new Vector2(horizontalWidth, _mapConfig.boundarySettings.spriteCSize.y));
         }
 
-        private void CreateTile(string name, Transform parent, Vector3 localPosition, Sprite sprite, int sortingOrder = 0, Vector2? slicedSize = null)
+        private void CreateTile(string name, Transform parent, Vector3 localPosition, Sprite sprite, int sortingOrder = -3, Vector2? slicedSize = null)
         {
             var tileObject = new GameObject(name);
             tileObject.transform.SetParent(parent, false);

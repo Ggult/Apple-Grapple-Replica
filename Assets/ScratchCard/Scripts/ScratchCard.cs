@@ -168,8 +168,7 @@ namespace ScratchCardAsset
 		{
 			var qualityRatio = (float)RenderTextureQuality;
 			var renderTextureSize = new Vector2(ScratchData.TextureSize.x / qualityRatio, ScratchData.TextureSize.y / qualityRatio);
-			var renderTextureFormat = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.R8) ? 
-				RenderTextureFormat.R8 : RenderTextureFormat.ARGB32;
+			var renderTextureFormat = RenderTextureFormat.ARGB32;
 			RenderTexture = new RenderTexture((int)renderTextureSize.x, (int)renderTextureSize.y, 0, renderTextureFormat);
 			SurfaceMaterial.SetTexture(Constants.MaskShader.MaskTexture, RenderTexture);
 			RenderTarget = new RenderTargetIdentifier(RenderTexture);

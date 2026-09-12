@@ -173,12 +173,11 @@ namespace ScratchCardAsset
 			scratchMode = card.Mode;
 			commandBuffer = new CommandBuffer {name = "EraseProgress"};
 			mesh = MeshGenerator.GenerateQuad(Vector3.one, Vector3.zero);
-			var renderTextureFormat = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.R8) ? 
-				RenderTextureFormat.R8 : RenderTextureFormat.ARGB32;
+			var renderTextureFormat = RenderTextureFormat.ARGB32;
 			percentRenderTexture = new RenderTexture(1, 1, 0, renderTextureFormat);
 			percentTargetIdentifier = new RenderTargetIdentifier(percentRenderTexture);
 			percentTextureRect = new Rect(0, 0, percentRenderTexture.width, percentRenderTexture.height);
-			var textureFormat = SystemInfo.SupportsTextureFormat(TextureFormat.R8) ? TextureFormat.R8 : TextureFormat.ARGB32;
+			var textureFormat = TextureFormat.ARGB32;
 			progressTexture = new Texture2D(percentRenderTexture.width, percentRenderTexture.height, textureFormat, false, true);
 		}
 		

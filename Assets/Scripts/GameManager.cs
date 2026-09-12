@@ -1,3 +1,4 @@
+using ScratchCardAsset;
 using UnityEngine;
 
 namespace AppleGrapple
