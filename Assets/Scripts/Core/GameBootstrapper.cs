@@ -7,8 +7,6 @@ namespace AppleGrapple
     public sealed class GameBootstrapper : MonoBehaviour
     {
         [SerializeField] private MapController mapController;
-        [SerializeField] private PickupRegistry pickupRegistry;
-        [SerializeField] private CharacterRegistry characterRegistry;
         [SerializeField] private PickupSpawner pickupSpawner;
         [SerializeField] private CharactersSpawner charactersSpawner;
         [SerializeField] private CameraFollowController cameraFollow;
