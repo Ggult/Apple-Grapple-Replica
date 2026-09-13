@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace AppleGrapple
 {
-    [RequireComponent(typeof(CharacterIdentity))]
     public class SwordOrigin : MonoBehaviour
     {
         [SerializeField] private float _radius = 1.5f;
@@ -17,15 +16,15 @@ namespace AppleGrapple
         private readonly List<float> _targetSlotAngles = new List<float>();
         private float _orbitAngle;
         private float _orbitSpeed;
-        private CharacterIdentity _identity;
+        private CharacterRoot _character;
     
 
-        public bool IsPlayer => _identity is {IsPlayer: true};
+        public bool IsPlayer => _character.Identity.IsPlayer;
         public int SwordCount => _weapons.Count;
 
         private void Awake()
         {
-            _identity = GetComponent<CharacterIdentity>();
+            _character = GetComponent<CharacterRoot>();
             _orbitSpeed = Mathf.Min(_maxOrbitSpeed, _initialOrbitSpeed);
             if (pickupCollector != null)
             {

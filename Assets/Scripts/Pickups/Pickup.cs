@@ -16,6 +16,16 @@ namespace AppleGrapple
         [SerializeField] private PickupType pickupType;
         public PickupType PickupType => pickupType;
         private EnemyStateMachine _reservedBy;
+
+        private void OnEnable()
+        {
+            PickupRegistry.Instance?.Register(this);
+        }
+
+        private void OnDisable()
+        {
+            PickupRegistry.Instance?.Unregister(this);
+        }
        
         public abstract bool TryCollect();
 

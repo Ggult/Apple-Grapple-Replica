@@ -1,52 +1,47 @@
 using System.Collections.Generic;
-using ScratchCardAsset;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace AppleGrapple
 {
-    public class GameManager : MonoBehaviour
+    public sealed class GameBootstrapper : MonoBehaviour
     {
-        [SerializeField] private MapConfig mapConfig;
-        private MapGenerator _mapGenerator;
+        [SerializeField] private MapController mapController;
+        [SerializeField] private PickupRegistry pickupRegistry;
+        [SerializeField] private CharacterRegistry characterRegistry;
         [SerializeField] private PickupSpawner pickupSpawner;
         [SerializeField] private CharactersSpawner charactersSpawner;
         [SerializeField] private CameraFollowController cameraFollow;
         [SerializeField] private UIManager uiManager;
         [SerializeField] private bool startRoundOnAwake;
 
-        private readonly List<CharacterDeathController> _roundCharacters = new();
+        private readonly List<CharacterRoot> _roundCharacters = new();
         private bool _roundActive;
-        
 
         private void Awake()
         {
-            _mapGenerator = new MapGenerator(mapConfig);
-            GenerateMap();
+            if (mapController == null)
+            {
+                Debug.LogError("MapController is not assigned on the GameBootstrapper.", this);
+                return;
+            }
+
+            mapController.Generate();
         }
 
         private void Start()
         {
             if (startRoundOnAwake)
-            {
                 StartRound();
-            }
             else
                 uiManager?.ShowStartPanel(StartRound);
         }
-        private void Restart()
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-        private void GenerateMap()
-        {
-            _mapGenerator.Generate();
-        }
+
         public void StartRound()
         {
             if (charactersSpawner == null)
             {
-                Debug.LogError("CharactersSpawner is not assigned in the GameManager.", this);
+                Debug.LogError("CharactersSpawner is not assigned on the GameBootstrapper.", this);
                 return;
             }
 
@@ -57,22 +52,12 @@ namespace AppleGrapple
             if (player == null)
                 return;
 
-            if (cameraFollow != null)
-            {
-                cameraFollow.SetTarget(player);
-            }
-            else
-            {
-                Debug.LogWarning("CameraFollowController is not assigned in the GameManager.", this);
-            }
-
+            cameraFollow?.SetTarget(player);
             StartSpawnPickups();
             _roundActive = true;
 
             if (GetAliveEnemyCount() == 0)
-            {
                 EndRound(true);
-            }
         }
 
         private void SubscribeToDeaths()
@@ -99,7 +84,7 @@ namespace AppleGrapple
             _roundCharacters.Clear();
         }
 
-        private void HandleCharacterDied(CharacterDeathController character)
+        private void HandleCharacterDied(CharacterRoot character)
         {
             if (!_roundActive)
                 return;
@@ -111,9 +96,7 @@ namespace AppleGrapple
             }
 
             if (GetAliveEnemyCount() == 0)
-            {
                 EndRound(true);
-            }
         }
 
         private int GetAliveEnemyCount()
@@ -137,16 +120,18 @@ namespace AppleGrapple
             pickupSpawner?.StopSpawning();
             StopRoundCharacterMovement();
             UnsubscribeFromDeaths();
-
             uiManager?.ShowResultPanel(playerWon, Restart);
         }
 
         private void StopRoundCharacterMovement()
         {
             foreach (var character in _roundCharacters)
-            {
                 character?.StopMovement();
-            }
+        }
+
+        private void Restart()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void OnDestroy()
@@ -154,15 +139,12 @@ namespace AppleGrapple
             UnsubscribeFromDeaths();
         }
 
-    
         private void StartSpawnPickups()
         {
             if (pickupSpawner != null)
-            {
                 pickupSpawner.StartSpawning();
-            }
             else
-                Debug.LogWarning("PickupSpawner is not assigned in the GameManager !");
+                Debug.LogWarning("PickupSpawner is not assigned on the GameBootstrapper.", this);
         }
     }
 }

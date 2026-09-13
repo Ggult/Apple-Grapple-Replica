@@ -1390,7 +1390,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: 2874e78a63142aa4f90d287130d475ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2683,8 +2683,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapConfig: {fileID: 11400000, guid: fc31c0fcc9a57af4bbad395d6ae61d3a, type: 2}
-  _playerPrefab: {fileID: 8755159583240507164, guid: a2b03b5f50945714bb1b10a10d73c8e5, type: 3}
-  _enemyPrefab: {fileID: 6865230436030615260, guid: e5eacfb5ddf6cd6419ae477687e9a3ae, type: 3}
+  _playerPrefab: {fileID: 6000000000000000001, guid: a2b03b5f50945714bb1b10a10d73c8e5, type: 3}
+  _enemyPrefab: {fileID: 6000000000000000002, guid: e5eacfb5ddf6cd6419ae477687e9a3ae, type: 3}
   _boundaryMargin: 5
   _minimumSpawnDistance: 4
   _positionAttempts: 40
@@ -2925,8 +2925,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1858625475}
   - component: {fileID: 1858625474}
+  - component: {fileID: 1858625476}
+  - component: {fileID: 1858625477}
+  - component: {fileID: 1858625478}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: GameBootstrapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2944,7 +2947,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886e1d52e9d53f645ad310aff0ee82a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapConfig: {fileID: 11400000, guid: fc31c0fcc9a57af4bbad395d6ae61d3a, type: 2}
+  mapController: {fileID: 1858625476}
+  pickupRegistry: {fileID: 1858625478}
+  characterRegistry: {fileID: 1858625477}
   pickupSpawner: {fileID: 1455818432}
   charactersSpawner: {fileID: 1815705745}
   cameraFollow: {fileID: 2118923364}
@@ -2965,6 +2970,44 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1858625476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858625473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3588a83c8981c40a4acacc88ac5499, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapConfig: {fileID: 11400000, guid: fc31c0fcc9a57af4bbad395d6ae61d3a, type: 2}
+  _boundaryColliderThickness: 0.1
+--- !u!114 &1858625477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858625473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f87b9f0e6f24f9c8d7ab0fc5f8a71d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1858625478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858625473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c4f2cc56d9c4a28a5f1d0e2bd7b4a93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1861288313
 GameObject:
   m_ObjectHideFlags: 0
@@ -3246,7 +3289,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: -3
   m_Sprite: {fileID: 21300000, guid: 2874e78a63142aa4f90d287130d475ad, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.6313726}
   m_FlipX: 0

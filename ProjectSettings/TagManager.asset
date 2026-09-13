@@ -41,5 +41,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Fences
+    uniqueID: 3709206039
+    locked: 0
   m_RenderingLayers:
   - Default

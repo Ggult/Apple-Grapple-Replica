@@ -6,17 +6,16 @@ namespace AppleGrapple
     public class CharactersSpawner : MonoBehaviour
     {
         [SerializeField] private MapConfig _mapConfig;
-        [SerializeField] private CharacterIdentity _playerPrefab;
-        [SerializeField] private EnemyStateMachine _enemyPrefab;
+        [SerializeField] private CharacterRoot _playerPrefab;
+        [SerializeField] private CharacterRoot _enemyPrefab;
         [SerializeField, Min(0f)] private float _boundaryMargin = 5f;
         [SerializeField, Min(0f)] private float _minimumSpawnDistance = 4f;
         [SerializeField, Min(1)] private int _positionAttempts = 40;
 
-        private readonly List<GameObject> _spawnedCharacters = new();
-        private readonly List<CharacterDeathController> _spawnedDeathControllers = new();
+        private readonly List<CharacterRoot> _spawnedCharacters = new();
 
         public Transform Player { get; private set; }
-        public IReadOnlyList<CharacterDeathController> SpawnedCharacters => _spawnedDeathControllers;
+        public IReadOnlyList<CharacterRoot> SpawnedCharacters => _spawnedCharacters;
 
         public void SpawnCharacters(int enemyCount)
         {
@@ -32,8 +31,7 @@ namespace AppleGrapple
             var occupiedPositions = new List<Vector2>();
             var playerPosition = GetSpawnPosition(occupiedPositions);
             var player = Instantiate(_playerPrefab, playerPosition, Quaternion.identity);
-            _spawnedCharacters.Add(player.gameObject);
-            _spawnedDeathControllers.Add(player.GetComponent<CharacterDeathController>());
+            _spawnedCharacters.Add(player);
             occupiedPositions.Add(playerPosition);
             Player = player.transform;
 
@@ -41,8 +39,7 @@ namespace AppleGrapple
             {
                 var enemyPosition = GetSpawnPosition(occupiedPositions);
                 var enemy = Instantiate(_enemyPrefab, enemyPosition, Quaternion.identity);
-                _spawnedCharacters.Add(enemy.gameObject);
-                _spawnedDeathControllers.Add(enemy.GetComponent<CharacterDeathController>());
+                _spawnedCharacters.Add(enemy);
                 occupiedPositions.Add(enemyPosition);
             }
         }
@@ -111,7 +108,6 @@ namespace AppleGrapple
             }
 
             _spawnedCharacters.Clear();
-            _spawnedDeathControllers.Clear();
             Player = null;
         }
     }

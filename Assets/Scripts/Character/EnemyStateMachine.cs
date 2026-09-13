@@ -2,9 +2,7 @@ using UnityEngine;
 
 namespace AppleGrapple
 {
-    [RequireComponent(typeof(CharacterMovementController), typeof(Health), typeof(CharacterIdentity))]
-    [RequireComponent(typeof(SwordOrigin))]
-    [RequireComponent(typeof(CharacterDeathController))]
+    [RequireComponent(typeof(CharacterRoot))]
     public class EnemyStateMachine : MonoBehaviour, IInputProvider
     {
         [SerializeField] private float _attackDistance = 1.5f;
@@ -14,13 +12,9 @@ namespace AppleGrapple
         [SerializeField] private float _roamArrivalDistance = 0.25f;
         [SerializeField] private float _roamMinimumDistance = 3f;
         [SerializeField] private MapConfig _mapConfig;
-        [SerializeField] private CharacterConfig _characterConfig;
         private const float RoamBoundaryMargin = 5f;
 
-        private CharacterMovementController _movementController;
-        private Health _health;
-        private CharacterIdentity _identity;
-        private SwordOrigin _swordOrigin;
+        private CharacterRoot _character;
         private EnemyStateBase _currentState;
         private Vector2 _movementInput;
         private float _decisionTimer;
@@ -35,19 +29,20 @@ namespace AppleGrapple
         [SerializeField] private Vector2 _debugMovementInput;
     #endif
 
-        internal CharacterMovementController MovementController => _movementController;
-        internal Health Health => _health;
-        internal CharacterIdentity Identity => _identity;
+        internal CharacterRoot Character => _character;
+        internal CharacterMovementController MovementController => _character.Movement;
+        internal Health Health => _character.Health;
+        internal CharacterIdentity Identity => _character.Identity;
         internal float AttackDistance => _attackDistance;
         internal float EnemySearchRadius => _enemySearchRadius;
         internal float LowHealthThreshold => _lowHealthThreshold;
-        internal float AiSmartValue => _characterConfig.aiSmartValue;
-        internal SwordOrigin SwordOrigin => _swordOrigin;
+        internal float AiSmartValue => _character.CharacterConfig.aiSmartValue;
+        internal SwordOrigin SwordOrigin => _character.SwordOrigin;
         internal float DecisionInterval => _decisionInterval;
         internal float RoamArrivalDistance => _roamArrivalDistance;
-        internal float RoamStoppingDistance => Mathf.Max(_roamArrivalDistance, _characterConfig.movementSpeed * _decisionInterval);
+        internal float RoamStoppingDistance => Mathf.Max(_roamArrivalDistance, _character.CharacterConfig.movementSpeed * _decisionInterval);
         internal MapConfig MapConfig => _mapConfig;
-        internal Transform Target { get; private set; }
+        internal CharacterRoot Target { get; private set; }
         internal EnemyStateBase InitialState { get; private set; }
         internal EnemyStateBase SearchForEnemyState { get; private set; }
         internal EnemyStateBase SearchForSwordState { get; private set; }
@@ -60,10 +55,7 @@ namespace AppleGrapple
 
         private void Awake()
         {
-            _movementController = GetComponent<CharacterMovementController>();
-            _health = GetComponent<Health>();
-            _identity = GetComponent<CharacterIdentity>();
-            _swordOrigin = GetComponent<SwordOrigin>();
+            _character = GetComponent<CharacterRoot>();
 
             InitialState = new EnemyInitialState(this);
             SearchForEnemyState = new EnemySearchForEnemyState(this);
@@ -72,22 +64,22 @@ namespace AppleGrapple
             IdleState = new EnemyIdleState(this);
             DeadState = new EnemyDeadState(this);
 
-            _health.Died += HandleDied;
-            _health.Damaged += HandleDamaged;
+            _character.Health.Died += HandleDied;
+            _character.Health.Damaged += HandleDamaged;
         }
 
         private void Start()
         {
-            _movementController.SetInputProvider(this);
+            _character.Movement.SetInputProvider(this);
             ChangeState(InitialState);
         }
 
         private void OnDestroy()
         {
-            if (_health != null)
+            if (_character != null && _character.Health != null)
             {
-                _health.Died -= HandleDied;
-                _health.Damaged -= HandleDamaged;
+                _character.Health.Died -= HandleDied;
+                _character.Health.Damaged -= HandleDamaged;
             }
 
             _currentState?.Exit();
@@ -143,15 +135,15 @@ namespace AppleGrapple
         {
             _debugCurrentState = _currentState?.GetType().Name ?? "None";
             _debugTarget = Target != null ? Target.name : "None";
-            _debugSwordCount = _swordOrigin != null ? _swordOrigin.SwordCount : 0;
-            var targetSwordOrigin = Target != null ? Target.GetComponent<SwordOrigin>() : null;
+            _debugSwordCount = SwordOrigin != null ? SwordOrigin.SwordCount : 0;
+            var targetSwordOrigin = Target != null ? Target.SwordOrigin : null;
             _debugTargetSwordCount = targetSwordOrigin != null ? targetSwordOrigin.SwordCount : 0;
-            _debugHealthPercent = _health != null ? _health.HealthPercent : 0f;
+            _debugHealthPercent = Health != null ? Health.HealthPercent : 0f;
             _debugMovementInput = _movementInput;
         }
 #endif
 
-        internal void SetTarget(Transform target)
+        internal void SetTarget(CharacterRoot target)
         {
             Target = target;
         }
@@ -161,32 +153,32 @@ namespace AppleGrapple
             if (Target == null || !Target.gameObject.activeInHierarchy)
                 return false;
 
-            var targetHealth = Target.GetComponent<Health>();
-            return targetHealth != null && !targetHealth.IsDead;
+            return !Target.Health.IsDead;
         }
 
-        internal Transform FindClosestEnemy()
+        internal CharacterRoot FindClosestEnemy()
         {
-            var identities = Object.FindObjectsByType<CharacterIdentity>(FindObjectsSortMode.None);
-            Transform closest = null;
+            var characters = CharacterRegistry.Instance != null
+                ? CharacterRegistry.Instance.Characters
+                : System.Array.Empty<CharacterRoot>();
+            CharacterRoot closest = null;
             var closestDistance = float.MaxValue;
 
-            foreach (var identity in identities)
+            foreach (var character in characters)
             {
-                if (identity == _identity)
+                if (character == _character)
                     continue;
 
-                var targetHealth = identity.GetComponent<Health>();
-                if (targetHealth == null || targetHealth.IsDead)
+                if (character.Health.IsDead)
                     continue;
 
-                var distance = (identity.transform.position - transform.position).sqrMagnitude;
+                var distance = (character.transform.position - transform.position).sqrMagnitude;
                 if (distance > _enemySearchRadius * _enemySearchRadius)
                     continue;
 
                 if (distance < closestDistance)
                 {
-                    closest = identity.transform;
+                    closest = character;
                     closestDistance = distance;
                 }
             }
@@ -196,7 +188,9 @@ namespace AppleGrapple
 
         internal SwordPickup FindClosestSwordPickup()
         {
-            var pickups = Object.FindObjectsByType<SwordPickup>(FindObjectsSortMode.None);
+            var pickups = PickupRegistry.Instance != null
+                ? PickupRegistry.Instance.SwordPickups
+                : System.Array.Empty<SwordPickup>();
             SwordPickup closest = null;
             var closestDistance = float.MaxValue;
 

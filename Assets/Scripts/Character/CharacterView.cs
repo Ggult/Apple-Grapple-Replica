@@ -4,7 +4,7 @@ namespace AppleGrapple
 {
     // Purely visual: reacts to Health.Damaged with a hit-flash only. No physics, no movement control.
     // Body SpriteRenderer must use a material with the "AppleGrapple/SpriteFlash" shader (_FlashAmount property).
-    [RequireComponent(typeof(Health), typeof(CharacterIdentity))]
+    [RequireComponent(typeof(CharacterRoot))]
     public class CharacterView : MonoBehaviour
     {
 
@@ -12,8 +12,7 @@ namespace AppleGrapple
         [SerializeField] private SpriteRenderer[] hitFlashSprites;
         [SerializeField] private float hitFlashDuration = 0.15f;
         [SerializeField] private CharacterInfoView characterInfoViewPrefab;
-        private Health _health;
-        private CharacterIdentity _identity;
+        private CharacterRoot _character;
         private CharacterInfoView _characterInfoView;
         private MaterialPropertyBlock _propertyBlock;
         private Coroutine _flashRoutine;
@@ -21,17 +20,17 @@ namespace AppleGrapple
 
         private void Awake()
         {
-            _health = GetComponent<Health>();
-            _identity = GetComponent<CharacterIdentity>();
+            _character = GetComponent<CharacterRoot>();
             _propertyBlock = new MaterialPropertyBlock();
-            _health.Damaged += HandleDamaged;
-            _health.HealthChanged += HandleHealthChanged;
+            _character.Health.Damaged += HandleDamaged;
+            _character.Health.HealthChanged += HandleHealthChanged;
+            _character.Health.Died += HandleDied;
 
             if (characterInfoViewPrefab != null && CharacterInfoCanvas.Instance != null)
             {
                 _characterInfoView = Instantiate(characterInfoViewPrefab, CharacterInfoCanvas.Instance.RectTransform);
                 _characterInfoView.SetFollowTarget(transform);
-                _characterInfoView.Setup(_identity.Data);
+                _characterInfoView.Setup(_character.Identity.Data);
             }
         }
 
@@ -39,14 +38,15 @@ namespace AppleGrapple
         {
             if (_characterInfoView != null)
             {
-                _characterInfoView.UpdateHealth(_health.CurrentHealth, _health.MaxHealth);
+                _characterInfoView.UpdateHealth(_character.Health.CurrentHealth, _character.Health.MaxHealth);
             }
         }
 
         private void OnDestroy()
         {
-            _health.Damaged -= HandleDamaged;
-            _health.HealthChanged -= HandleHealthChanged;
+            _character.Health.Damaged -= HandleDamaged;
+            _character.Health.HealthChanged -= HandleHealthChanged;
+            _character.Health.Died -= HandleDied;
         }
 
         private void HandleDamaged(HitInfo hitInfo)
@@ -60,6 +60,11 @@ namespace AppleGrapple
             {
                 _characterInfoView.UpdateHealth(current, max);
             }
+        }
+
+        private void HandleDied()
+        {
+            RemoveCharacterInfo();
         }
 
         public void RemoveCharacterInfo()

@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
-using AppleGrapple;
 
-public class WeaponPooling : MonoBehaviour
+namespace AppleGrapple
 {
-    [SerializeField] private WeaponConfig _weaponConfig;
-    [SerializeField] private int _initialPoolSize = 20;
-    private static WeaponPooling _instance;
-    private readonly Queue<Sword> _pool = new();
+    public class WeaponPooling : MonoBehaviour
+    {
+        [SerializeField] private WeaponConfig _weaponConfig;
+        [SerializeField] private int _initialPoolSize = 20;
+        private static WeaponPooling _instance;
+        private readonly Queue<Sword> _pool = new();
 
-    private void Awake()
+        private void Awake()
     {
         if (_instance != null && _instance != this)
         {
@@ -23,7 +24,7 @@ public class WeaponPooling : MonoBehaviour
         }
     }
 
-    private Sword Create()
+        private Sword Create()
     {
         Sword sword = Instantiate(_weaponConfig.weaponPrefab, transform);
         sword.gameObject.SetActive(false);
@@ -33,7 +34,7 @@ public class WeaponPooling : MonoBehaviour
         return sword;
     }
 
-    public static Sword Get()
+        public static Sword Get()
     {
         if (_instance._pool.Count == 0)
         {
@@ -45,12 +46,13 @@ public class WeaponPooling : MonoBehaviour
 
         return sword;
     }
-    public static void Return(Sword sword)
+        public static void Return(Sword sword)
     {
         CombatResolver.ClearCooldowns(sword);
         sword.gameObject.SetActive(false);
         sword.transform.SetParent(_instance.transform);
 
         _instance._pool.Enqueue(sword);
+        }
     }
 }

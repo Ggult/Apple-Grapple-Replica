@@ -1,5 +1,3 @@
-using UnityEngine;
-using System;
 namespace AppleGrapple
 {
     public class SwordPickup : Pickup

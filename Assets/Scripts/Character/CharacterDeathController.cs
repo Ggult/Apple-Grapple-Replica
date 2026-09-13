@@ -3,28 +3,23 @@ using UnityEngine;
 
 namespace AppleGrapple
 {
-    [RequireComponent(typeof(Health), typeof(SwordOrigin), typeof(Rigidbody2D))]
     public class CharacterDeathController : MonoBehaviour
     {
+        private CharacterRoot _character;
         private Health _health;
         private SwordOrigin _swordOrigin;
-        private Rigidbody2D _rigidbody;
-        private CharacterView _characterView;
-        private EnemyStateMachine _enemyStateMachine;
         private Collider2D[] _colliders;
         private bool _hasDied;
 
         public event Action<CharacterDeathController> Died;
         public bool IsDead => _hasDied;
-        public bool IsPlayer => GetComponent<CharacterIdentity>()?.IsPlayer ?? false;
+        public bool IsPlayer => _character.Identity.IsPlayer;
 
         private void Awake()
         {
-            _health = GetComponent<Health>();
-            _swordOrigin = GetComponent<SwordOrigin>();
-            _rigidbody = GetComponent<Rigidbody2D>();
-            _characterView = GetComponent<CharacterView>();
-            _enemyStateMachine = GetComponent<EnemyStateMachine>();
+            _character = GetComponent<CharacterRoot>();
+            _health = _character.Health;
+            _swordOrigin = _character.SwordOrigin;
             _colliders = GetComponentsInChildren<Collider2D>(true);
             _health.Died += HandleDied;
         }
@@ -46,27 +41,17 @@ namespace AppleGrapple
             StopMovement();
             DisableColliders();
             _swordOrigin.RemoveAllWeapons();
-            _characterView?.RemoveCharacterInfo();
-
-            if (_enemyStateMachine != null && _enemyStateMachine.DeadState != null)
-            {
-                _enemyStateMachine.ChangeState(_enemyStateMachine.DeadState);
-            }
 
             Died?.Invoke(this);
         }
 
         public void StopMovement()
         {
-            _rigidbody.linearVelocity = Vector2.zero;
-            _rigidbody.angularVelocity = 0f;
+            _character.Rigidbody.linearVelocity = Vector2.zero;
+            _character.Rigidbody.angularVelocity = 0f;
 
-            var movementController = GetComponent<CharacterMovementController>();
-            if (movementController != null)
-            {
-                movementController.ClearInputProvider();
-                movementController.enabled = false;
-            }
+            _character.Movement.ClearInputProvider();
+            _character.Movement.enabled = false;
         }
 
         private void DisableColliders()

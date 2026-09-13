@@ -1,16 +1,17 @@
-using AppleGrapple;
 using ScratchCardAsset;
 using UnityEngine;
 
-public class ScratchManager : MonoBehaviour
+namespace AppleGrapple
 {
-    [SerializeField] private ScratchCardManager scratchCardManager;
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private MapConfig mapConfig;
-    [SerializeField] private SpriteRenderer bottomLayerScratchSpriteRenderer;
-    private static ScratchManager _instance;
+    public class ScratchManager : MonoBehaviour
+    {
+        [SerializeField] private ScratchCardManager scratchCardManager;
+        [SerializeField] private Camera mainCamera;
+        [SerializeField] private MapConfig mapConfig;
+        [SerializeField] private SpriteRenderer bottomLayerScratchSpriteRenderer;
+        private static ScratchManager _instance;
 
-    private void Awake()
+        private void Awake()
     {
         if (_instance == null)
         {
@@ -45,7 +46,7 @@ public class ScratchManager : MonoBehaviour
         bottomLayerScratchSpriteRenderer.gameObject.SetActive(true);
     }
 
-    private void DisableMouseScratching()
+        private void DisableMouseScratching()
     {
         if (scratchCardManager != null && scratchCardManager.Card != null)
         {
@@ -53,7 +54,7 @@ public class ScratchManager : MonoBehaviour
         }
     }
 
-    private void ApplyScratchCardTransform()
+        private void ApplyScratchCardTransform()
     {
         if (mapConfig == null || scratchCardManager == null || scratchCardManager.SpriteRendererCard == null)
             return;
@@ -67,13 +68,13 @@ public class ScratchManager : MonoBehaviour
         bottomLayerScratchSpriteRenderer.transform.localPosition = new Vector3(spriteTransform.localPosition.x - .3f, spriteTransform.localPosition.y - .3f, spriteTransform.localPosition.z);
     }
 
-    private static float CalculateScale(float worldSize)
+        private static float CalculateScale(float worldSize)
     {
         // Calibrated from the scene measurements: 40 world units -> 2x, 50 -> 3x.
         return Mathf.Max(0f, (worldSize - 20f) / 10f);
     }
 
-    public static void Scratch(Vector3 worldPosition)
+        public static void Scratch(Vector3 worldPosition)
     {
         if (_instance == null || _instance.scratchCardManager == null || _instance.mainCamera == null)
             return;
@@ -85,7 +86,7 @@ public class ScratchManager : MonoBehaviour
 
         var texturePosition = _instance.scratchCardManager.Card.ScratchData.GetScratchPosition(screenPosition);
         _instance.scratchCardManager.Card.ScratchHole(texturePosition);
+        }
+
     }
-
-
 }

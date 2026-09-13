@@ -4,11 +4,11 @@ namespace AppleGrapple
 {
     public class Health : MonoBehaviour
     {
-        [SerializeField] private CharacterConfig _characterConfig;
+        private CharacterRoot _character;
         private int _currentHealth;
 
         public int CurrentHealth => _currentHealth;
-        public int MaxHealth => _characterConfig.maxHealth;
+        public int MaxHealth => _character.CharacterConfig.maxHealth;
         public float HealthPercent => MaxHealth <= 0 ? 0f : (float)_currentHealth / MaxHealth;
         public bool IsDead => _currentHealth <= 0;
 
@@ -18,6 +18,7 @@ namespace AppleGrapple
 
         private void Awake()
         {
+            _character = GetComponent<CharacterRoot>();
             _currentHealth = MaxHealth;
         }
 

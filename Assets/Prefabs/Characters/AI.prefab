@@ -107,6 +107,8 @@ GameObject:
   - component: {fileID: 8896134844260025934}
   - component: {fileID: 6865230436030615260}
   - component: {fileID: 8559908866173161526}
+  - component: {fileID: 6000000000000000002}
+  - component: {fileID: 1768174800653216803}
   m_Layer: 6
   m_Name: AI
   m_TagString: Untagged
@@ -233,6 +235,7 @@ MonoBehaviour:
   _radius: 2.2
   _initialOrbitSpeed: 250
   _orbitSpeedPerSword: 20
+  _maxOrbitSpeed: 450
   _slotBlendSpeed: 180
   pickupCollector: {fileID: 7493239659792873649}
 --- !u!114 &2692510439638329152
@@ -247,7 +250,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50bf884c6f2f86345a4d8fb80ea6fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
 --- !u!114 &1598638835638465464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,7 +307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c290cbc7626a643af91b5a86c1496d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
 --- !u!114 &6865230436030615260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +326,6 @@ MonoBehaviour:
   _roamArrivalDistance: 0.25
   _roamMinimumDistance: 3
   _mapConfig: {fileID: 11400000, guid: fc31c0fcc9a57af4bbad395d6ae61d3a, type: 2}
-  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
   _debugCurrentState: 
   _debugLastDecision: 
   _debugTarget: 
@@ -348,6 +348,31 @@ MonoBehaviour:
   _animator: {fileID: 1507295263037823011}
   _body: {fileID: 4165200009537385968}
   _flipWithMovement: 1
+--- !u!114 &6000000000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520637305142227602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34701c8d53f05f74fb06156e66ee9a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterConfig: {fileID: 11400000, guid: 26afdc6cfbe42e247aa98a3cc6f94e60, type: 2}
+--- !u!114 &1768174800653216803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520637305142227602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d20034e4c297511448177e858b6e99b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1168486360895390233
 GameObject:
   m_ObjectHideFlags: 0

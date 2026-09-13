@@ -144,7 +144,7 @@ namespace AppleGrapple
                 return;
             }
 
-            var offset = StateMachine.Target.position - StateMachine.transform.position;
+            var offset = StateMachine.Target.transform.position - StateMachine.transform.position;
             if (offset.sqrMagnitude <= StateMachine.AttackDistance * StateMachine.AttackDistance)
             {
                 StateMachine.SetMovementInput(Vector2.zero);
@@ -159,7 +159,7 @@ namespace AppleGrapple
             if (!StateMachine.HasValidTarget() || StateMachine.SwordOrigin.SwordCount == 0)
                 return false;
 
-            var targetSwordOrigin = StateMachine.Target.GetComponent<SwordOrigin>();
+            var targetSwordOrigin = StateMachine.Target.SwordOrigin;
             if (targetSwordOrigin == null || targetSwordOrigin.SwordCount <= StateMachine.SwordOrigin.SwordCount)
                 return false;
 

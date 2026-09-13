@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MapConfig
   m_EditorClassIdentifier: 
   tileWorldSize: 0.9
-  GridX: 50
-  GridY: 50
+  GridX: 60
+  GridY: 60
   mapTileVariants:
   - Chance: 0.05
     tileSprite: {fileID: 21300000, guid: f87ba4f8eef81df4da02274ff10b990f, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
     tileSprite: {fileID: 21300000, guid: fafef72180419924eb89dc5046a4c690, type: 3}
   defaultTileSprite: {fileID: 21300000, guid: 64b1524b09dbdf7428d18ca1063ac485, type: 3}
   boundarySettings:
-    offset: {x: 2, y: 2}
+    offset: {x: 4, y: 4}
     spriteA: {fileID: 21300000, guid: 591938bf282828d49b0775a7bb59daf2, type: 3}
     spriteB: {fileID: 21300000, guid: 5555e7f0b90dd7f43aafb0899dd45183, type: 3}
     spriteC: {fileID: 21300000, guid: db6901723f27f984da003ee71c5cf68e, type: 3}

@@ -2,40 +2,36 @@ using UnityEngine;
 
 namespace AppleGrapple
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(Health))]
+    [RequireComponent(typeof(CharacterRoot))]
     public class CharacterAnimationsController : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
         [SerializeField] private SpriteRenderer _body;
         [SerializeField] private bool _flipWithMovement = true;
 
-        private Rigidbody2D _rigidbody;
-        private Health _health;
+        private CharacterRoot _character;
         private const string SpeedParameterId = "Speed";
         private const string DeadTriggerId = "OnDead";
         private bool _isDead;
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
-            _health = GetComponent<Health>();
+            _character = GetComponent<CharacterRoot>();
             _animator ??= GetComponent<Animator>();
             _body ??= GetComponentInChildren<SpriteRenderer>();
-            _health.Died += OnDead;
+            _character.Health.Died += OnDead;
         }
 
         private void OnDestroy()
         {
-            if (_health != null)
-            {
-                _health.Died -= OnDead;
-            }
+            if (_character != null && _character.Health != null)
+                _character.Health.Died -= OnDead;
         }
 
         private void Update()
         {
             if (_isDead) return;
-            var velocity = _rigidbody.linearVelocity;
+            var velocity = _character.Rigidbody.linearVelocity;
             var speed = Mathf.Clamp01(velocity.magnitude);
 
             if (_animator != null)

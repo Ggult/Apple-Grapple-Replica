@@ -1,12 +1,11 @@
 using UnityEngine;
 namespace AppleGrapple
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     public class CharacterMovementController : MonoBehaviour
     {
-        [SerializeField] private CharacterConfig _characterConfig;
         private IInputProvider _inputProvider;
-        private Rigidbody2D _rb;
-        private Health _health;
+        private CharacterRoot _character;
 
         private Vector2 _externalVelocityStart;
         private float _externalVelocityDuration;
@@ -14,21 +13,15 @@ namespace AppleGrapple
 
         private void Awake()
         {
-            _rb = GetComponent<Rigidbody2D>();      
-            _health = GetComponent<Health>();
+            _character = GetComponent<CharacterRoot>();
 
-            if (_health != null)
-            {
-                _health.Damaged += HandleDamaged;
-            }
+            _character.Health.Damaged += HandleDamaged;
         }
 
         private void OnDestroy()
         {
-            if (_health != null)
-            {
-                _health.Damaged -= HandleDamaged;
-            }
+            if (_character != null && _character.Health != null)
+                _character.Health.Damaged -= HandleDamaged;
         }
 
         public void SetInputProvider(IInputProvider inputProvider)
@@ -40,10 +33,7 @@ namespace AppleGrapple
         {
             _inputProvider = null;
 
-            if (_rb != null)
-            {
-                _rb.linearVelocity = Vector2.zero;
-            }
+            _character.Rigidbody.linearVelocity = Vector2.zero;
         }
 
         private void Update()
@@ -65,8 +55,8 @@ namespace AppleGrapple
         private void HandleDamaged(HitInfo hitInfo)
         {
             var direction = ((Vector2)transform.position - (Vector2)hitInfo.Position).normalized;
-            _externalVelocityStart = direction * _characterConfig.knockbackForce;
-            _externalVelocityDuration = _characterConfig.knockbackDuration;
+            _externalVelocityStart = direction * _character.CharacterConfig.knockbackForce;
+            _externalVelocityDuration = _character.CharacterConfig.knockbackDuration;
             _externalVelocityElapsed = 0f;
         }
 
@@ -83,10 +73,7 @@ namespace AppleGrapple
 
         public void Move(Vector2 direction)
         {
-            if (_rb != null)
-            {
-                _rb.linearVelocity = direction * _characterConfig.movementSpeed + GetExternalVelocity();
-            }
+            _character.Rigidbody.linearVelocity = direction * _character.CharacterConfig.movementSpeed + GetExternalVelocity();
         }
     }
 }
