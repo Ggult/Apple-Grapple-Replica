@@ -24,7 +24,8 @@ namespace AppleGrapple
         public void OnPlayButtonClicked()
         {
             PlayerPrefsService.PlayerProfile = new CharacterProfileData(_validatedNick, PlayerPrefsService.PlayerProfile.Country);
-            PlayerPrefsService.SelectedEnemyCount = int.Parse(_validatedTotalEnemyCount);
+            var parsedEnemy = int.TryParse(_validatedTotalEnemyCount, out var enemyCount);
+            PlayerPrefsService.SelectedEnemyCount = parsedEnemy ? enemyCount : 3;
             _onStart?.Invoke();
             Hide();
         }

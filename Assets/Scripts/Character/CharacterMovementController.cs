@@ -36,6 +36,16 @@ namespace AppleGrapple
             _inputProvider = inputProvider;
         }
 
+        public void ClearInputProvider()
+        {
+            _inputProvider = null;
+
+            if (_rb != null)
+            {
+                _rb.linearVelocity = Vector2.zero;
+            }
+        }
+
         private void Update()
         {
             if (_inputProvider != null)

@@ -56,7 +56,7 @@ namespace AppleGrapple
             Died?.Invoke(this);
         }
 
-        private void StopMovement()
+        public void StopMovement()
         {
             _rigidbody.linearVelocity = Vector2.zero;
             _rigidbody.angularVelocity = 0f;
@@ -64,6 +64,7 @@ namespace AppleGrapple
             var movementController = GetComponent<CharacterMovementController>();
             if (movementController != null)
             {
+                movementController.ClearInputProvider();
                 movementController.enabled = false;
             }
         }

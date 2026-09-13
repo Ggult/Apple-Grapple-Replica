@@ -96,8 +96,15 @@ namespace AppleGrapple
 
         private Vector3 GetRandomArenaPosition()
         {
-            var halfWidth = _mapConfig.GridX * 0.5f * _mapConfig.tileWorldSize - _arenaMargin;
-            var halfHeight = _mapConfig.GridY * 0.5f * _mapConfig.tileWorldSize - _arenaMargin;
+            var boundaryOffset = _mapConfig.boundarySettings.offset;
+            var halfWidth = Mathf.Max(0f,
+                (_mapConfig.GridX * 0.5f + 0.5f) * _mapConfig.tileWorldSize
+                - boundaryOffset.x
+                - _arenaMargin);
+            var halfHeight = Mathf.Max(0f,
+                (_mapConfig.GridY * 0.5f + 0.5f) * _mapConfig.tileWorldSize
+                - boundaryOffset.y
+                - _arenaMargin);
             var x = Random.Range(-halfWidth, halfWidth);
             var y = Random.Range(-halfHeight, halfHeight);
             return new Vector3(x, y, 0f);

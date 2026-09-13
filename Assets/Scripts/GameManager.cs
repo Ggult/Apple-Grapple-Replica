@@ -135,9 +135,18 @@ namespace AppleGrapple
 
             _roundActive = false;
             pickupSpawner?.StopSpawning();
+            StopRoundCharacterMovement();
             UnsubscribeFromDeaths();
 
             uiManager?.ShowResultPanel(playerWon, Restart);
+        }
+
+        private void StopRoundCharacterMovement()
+        {
+            foreach (var character in _roundCharacters)
+            {
+                character?.StopMovement();
+            }
         }
 
         private void OnDestroy()
