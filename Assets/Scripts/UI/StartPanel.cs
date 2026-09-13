@@ -9,19 +9,22 @@ namespace AppleGrapple
     {
         [SerializeField] private TMP_InputField nicknameInputField;
         [SerializeField] private TMP_InputField totalEnemyCountInputField;
-        
         private Action _onStart;
+
+        private string _validatedNick, _validatedTotalEnemyCount;
         public void Show(Action onStart)
         {
-            nicknameInputField.text = PlayerPrefsService.PlayerProfile.Nickname;
-            totalEnemyCountInputField.text = PlayerPrefsService.SelectedEnemyCount.ToString();
+            _validatedNick = PlayerPrefsService.PlayerProfile.Nickname;
+            _validatedTotalEnemyCount = PlayerPrefsService.SelectedEnemyCount.ToString();
+            nicknameInputField.text = _validatedNick;
+            totalEnemyCountInputField.text = _validatedTotalEnemyCount;
             _onStart = onStart;
             gameObject.SetActive(true);
         }
         public void OnPlayButtonClicked()
         {
-            PlayerPrefsService.PlayerProfile = new CharacterProfileData(nicknameInputField.text, PlayerPrefsService.PlayerProfile.Country);
-            PlayerPrefsService.SelectedEnemyCount = int.Parse(totalEnemyCountInputField.text);
+            PlayerPrefsService.PlayerProfile = new CharacterProfileData(_validatedNick, PlayerPrefsService.PlayerProfile.Country);
+            PlayerPrefsService.SelectedEnemyCount = int.Parse(_validatedTotalEnemyCount);
             _onStart?.Invoke();
             Hide();
         }
@@ -29,5 +32,40 @@ namespace AppleGrapple
         {
             gameObject.SetActive(false);
         }
+
+        public void ValidateNickInput(string nickInput)
+        {
+            _validatedNick = nickInput;
+        }
+        public void ValidateTotalEnemyCountInput(string countInput)
+        {
+            bool isValid;
+            if (!int.TryParse(countInput, out _))
+            {
+                countInput = _validatedTotalEnemyCount;
+                isValid = false;
+            }
+            else
+            {
+                if (int.Parse(countInput) <= 0)
+                {
+                    countInput = _validatedTotalEnemyCount;
+                    isValid = false;
+                }
+                else
+                {
+                    isValid = true;
+                }
+            }
+            if (!isValid)
+            {
+                totalEnemyCountInputField.text = _validatedTotalEnemyCount;
+            }
+            else{
+                _validatedTotalEnemyCount = countInput;
+            }
+            
+        }
+
     }
 }

@@ -1,13 +1,18 @@
 using UnityEngine;
 using System;
+using TMPro;
 public class ResultPanel : MonoBehaviour
 {
     private Action _onRestart;
+
+    [SerializeField] private TextMeshProUGUI resultText;
+    
     public void Show(bool isWin, Action onRestart)
     {
         gameObject.SetActive(true);
         _onRestart = onRestart;
         // You can add additional logic here to display win/lose state based on isWin
+        resultText.text = isWin ? "You Win!" : "Unlucky!";
     }
     public void Hide()
     {
