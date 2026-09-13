@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using ScratchCardAsset;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AppleGrapple
 {
@@ -12,6 +14,9 @@ namespace AppleGrapple
         [SerializeField] private CameraFollowController cameraFollow;
         [SerializeField] private UIManager uiManager;
         [SerializeField] private bool startRoundOnAwake;
+
+        private readonly List<CharacterDeathController> _roundCharacters = new();
+        private bool _roundActive;
         
 
         private void Awake()
@@ -29,7 +34,10 @@ namespace AppleGrapple
             else
                 uiManager?.ShowStartPanel(StartRound);
         }
-
+        private void Restart()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         private void GenerateMap()
         {
             _mapGenerator.Generate();
@@ -42,12 +50,12 @@ namespace AppleGrapple
                 return;
             }
 
+            UnsubscribeFromDeaths();
             charactersSpawner.SpawnCharacters(PlayerPrefsService.SelectedEnemyCount);
+            SubscribeToDeaths();
             var player = charactersSpawner.GetPlayerStartTransform();
             if (player == null)
                 return;
-
-            uiManager?.HideStartPanel();
 
             if (cameraFollow != null)
             {
@@ -59,6 +67,82 @@ namespace AppleGrapple
             }
 
             StartSpawnPickups();
+            _roundActive = true;
+
+            if (GetAliveEnemyCount() == 0)
+            {
+                EndRound(true);
+            }
+        }
+
+        private void SubscribeToDeaths()
+        {
+            _roundCharacters.Clear();
+            foreach (var character in charactersSpawner.SpawnedCharacters)
+            {
+                if (character == null)
+                    continue;
+
+                character.Died += HandleCharacterDied;
+                _roundCharacters.Add(character);
+            }
+        }
+
+        private void UnsubscribeFromDeaths()
+        {
+            foreach (var character in _roundCharacters)
+            {
+                if (character != null)
+                    character.Died -= HandleCharacterDied;
+            }
+
+            _roundCharacters.Clear();
+        }
+
+        private void HandleCharacterDied(CharacterDeathController character)
+        {
+            if (!_roundActive)
+                return;
+
+            if (character.IsPlayer)
+            {
+                EndRound(false);
+                return;
+            }
+
+            if (GetAliveEnemyCount() == 0)
+            {
+                EndRound(true);
+            }
+        }
+
+        private int GetAliveEnemyCount()
+        {
+            var aliveEnemies = 0;
+            foreach (var character in _roundCharacters)
+            {
+                if (character != null && !character.IsPlayer && !character.IsDead)
+                    aliveEnemies++;
+            }
+
+            return aliveEnemies;
+        }
+
+        private void EndRound(bool playerWon)
+        {
+            if (!_roundActive)
+                return;
+
+            _roundActive = false;
+            pickupSpawner?.StopSpawning();
+            UnsubscribeFromDeaths();
+
+            uiManager?.ShowResultPanel(playerWon, Restart);
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeFromDeaths();
         }
 
     

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace AppleGrapple
@@ -12,6 +13,10 @@ namespace AppleGrapple
         private EnemyStateMachine _enemyStateMachine;
         private Collider2D[] _colliders;
         private bool _hasDied;
+
+        public event Action<CharacterDeathController> Died;
+        public bool IsDead => _hasDied;
+        public bool IsPlayer => GetComponent<CharacterIdentity>()?.IsPlayer ?? false;
 
         private void Awake()
         {
@@ -47,6 +52,8 @@ namespace AppleGrapple
             {
                 _enemyStateMachine.ChangeState(_enemyStateMachine.DeadState);
             }
+
+            Died?.Invoke(this);
         }
 
         private void StopMovement()

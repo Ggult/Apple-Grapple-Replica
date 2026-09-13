@@ -23,6 +23,7 @@ namespace AppleGrapple
             PlayerPrefsService.PlayerProfile = new CharacterProfileData(nicknameInputField.text, PlayerPrefsService.PlayerProfile.Country);
             PlayerPrefsService.SelectedEnemyCount = int.Parse(totalEnemyCountInputField.text);
             _onStart?.Invoke();
+            Hide();
         }
         public void Hide()
         {

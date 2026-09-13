@@ -13,8 +13,10 @@ namespace AppleGrapple
         [SerializeField, Min(1)] private int _positionAttempts = 40;
 
         private readonly List<GameObject> _spawnedCharacters = new();
+        private readonly List<CharacterDeathController> _spawnedDeathControllers = new();
 
         public Transform Player { get; private set; }
+        public IReadOnlyList<CharacterDeathController> SpawnedCharacters => _spawnedDeathControllers;
 
         public void SpawnCharacters(int enemyCount)
         {
@@ -31,6 +33,7 @@ namespace AppleGrapple
             var playerPosition = GetSpawnPosition(occupiedPositions);
             var player = Instantiate(_playerPrefab, playerPosition, Quaternion.identity);
             _spawnedCharacters.Add(player.gameObject);
+            _spawnedDeathControllers.Add(player.GetComponent<CharacterDeathController>());
             occupiedPositions.Add(playerPosition);
             Player = player.transform;
 
@@ -39,6 +42,7 @@ namespace AppleGrapple
                 var enemyPosition = GetSpawnPosition(occupiedPositions);
                 var enemy = Instantiate(_enemyPrefab, enemyPosition, Quaternion.identity);
                 _spawnedCharacters.Add(enemy.gameObject);
+                _spawnedDeathControllers.Add(enemy.GetComponent<CharacterDeathController>());
                 occupiedPositions.Add(enemyPosition);
             }
         }
@@ -107,6 +111,7 @@ namespace AppleGrapple
             }
 
             _spawnedCharacters.Clear();
+            _spawnedDeathControllers.Clear();
             Player = null;
         }
     }
