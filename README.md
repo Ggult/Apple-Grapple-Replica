@@ -1,2 +1,0 @@
-# Apple Grapple Replica
-
